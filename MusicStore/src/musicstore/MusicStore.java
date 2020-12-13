@@ -16,7 +16,7 @@ public class MusicStore {
             
             Class.forName("oracle.jdbc.driver.OracleDriver");  
             
-            Connection con=DriverManager.getConnection("jdbc:oracle:thin:@asterix.fri.uniza.sk:1521:orcl", "kojda3", "**");   
+            Connection con=DriverManager.getConnection("jdbc:oracle:thin:@asterix.fri.uniza.sk:1521:orcl", "kojda3", "kajokojda");   
             Statement stmt=con.createStatement();  
 
             ResultSet rs=stmt.executeQuery("select * from os_udaje");  
