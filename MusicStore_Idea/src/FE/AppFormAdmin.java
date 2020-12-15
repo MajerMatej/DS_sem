@@ -9,6 +9,18 @@ import java.awt.event.WindowEvent;
 public class AppFormAdmin extends JFrame{
     private AppController controller;
     private JPanel rootPanel;
+    private JTextField textField4;
+    private JButton findUserSSongsButton;
+    private JButton findAlbumButton;
+    private JButton findAllSongsButton;
+    private JList list1;
+    private JPanel picture;
+    private JLabel loggedUserLabel;
+    private JLabel currentDateLabel;
+    private JButton logoutButton;
+    private JComboBox statistics;
+    private JTextField textField1;
+    private JList list2;
 
     AppFormAdmin(AppController controller) {
         this.controller = controller;
@@ -16,7 +28,9 @@ public class AppFormAdmin extends JFrame{
         setTitle("Music Store");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
-
+        statistics.addItem(new ComboItem("Visible String 1", "Value 1"));
+        statistics.addItem(new ComboItem("Visible String 2", "Value 2"));
+        statistics.addItem(new ComboItem("Visible String 3", "Value 3"));
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -33,5 +47,6 @@ public class AppFormAdmin extends JFrame{
                 }
             }
         });
+
     }
 }
