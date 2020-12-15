@@ -14,8 +14,7 @@ public class AppController {
 
     public boolean loginAutentification(String nickname, String pass) {
         ArrayList<String> result = new ArrayList<>();
-        String query = "Select * from user_table where username LIKE '" + nickname
-                + "' and password LIKE '" + pass + "';";
+        String query = "Select * from user_table where nickname LIKE '" + nickname + "' and user_password LIKE '" + pass + "';";
         conn.getQueryResult(query, result);
         if(result.size() == 0) return false;
         //TODO: parse result to user data
