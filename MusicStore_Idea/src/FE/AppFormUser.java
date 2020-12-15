@@ -9,6 +9,16 @@ public class AppFormUser extends JFrame {
     private AppController controller;
     private JPanel rootPanel;
     private JList list1;
+    private JButton findButton;
+    private JButton findAllButton;
+    private JTextField textField1;
+    private JCheckBox unownedOnlyCheckBox;
+    private JLabel loggedUserLabel;
+    private JLabel currentDateLabel;
+    private JPanel picture;
+    private JTextField textField2;
+    private JTextField textField3;
+    private JButton findByReleaseButton;
 
     AppFormUser(AppController controller) {
         this.controller = controller;
