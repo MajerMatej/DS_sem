@@ -1,33 +1,22 @@
 package FE;
 
+import BE.AppController;
+
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import BE.AppController;
 
-public class AppFormUser extends JFrame {
-    private AppController controller;
+public class AppFormRegistration extends JFrame {
     private JPanel rootPanel;
-    private JButton findAlbumButton;
-    private JButton findAllButton;
-    private JTextField textField1;
-    private JCheckBox unownedOnlyCheckBox;
-    private JLabel loggedUserLabel;
-    private JLabel currentDateLabel;
-    private JPanel picture;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JButton findByReleaseButton;
-    private JList list1;
-    private JButton myCollectionButton;
-    private JButton logoutButton;
-    private JTextField textField4;
-    private JButton findSongButton;
-
-    AppFormUser(AppController controller) {
+    private JTextField usernameInput;
+    private JTextField passwordInput;
+    private JTextField confirmPasswordInput;
+    private JButton registerButton;
+    private AppController controller;
+    AppFormRegistration(AppController controller) {
         this.controller = controller;
         add(rootPanel);
-        setTitle("Music Store");
+        setTitle("Music Store Registration");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
 

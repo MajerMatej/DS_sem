@@ -1,33 +1,25 @@
 package FE;
 
-import javax.swing.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import BE.AppController;
 
-public class AppFormUser extends JFrame {
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+public class AppFormLogin extends  JFrame{
     private AppController controller;
     private JPanel rootPanel;
-    private JButton findAlbumButton;
-    private JButton findAllButton;
     private JTextField textField1;
-    private JCheckBox unownedOnlyCheckBox;
-    private JLabel loggedUserLabel;
-    private JLabel currentDateLabel;
-    private JPanel picture;
     private JTextField textField2;
-    private JTextField textField3;
-    private JButton findByReleaseButton;
-    private JList list1;
-    private JButton myCollectionButton;
-    private JButton logoutButton;
-    private JTextField textField4;
-    private JButton findSongButton;
+    private JButton loginButton;
+    private JButton registrationButton;
 
-    AppFormUser(AppController controller) {
+    AppFormLogin(AppController controller) {
         this.controller = controller;
         add(rootPanel);
-        setTitle("Music Store");
+        setTitle("Music Store Login");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setVisible(true);
 
@@ -45,6 +37,13 @@ public class AppFormUser extends JFrame {
                 if (result == JOptionPane.YES_OPTION) {
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 }
+            }
+        });
+        registrationButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                new AppFormRegistration(controller);
+                dispose();
             }
         });
     }

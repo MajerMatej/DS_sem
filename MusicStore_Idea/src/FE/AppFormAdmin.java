@@ -1,30 +1,16 @@
 package FE;
 
+import BE.AppController;
+
 import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import BE.AppController;
 
-public class AppFormUser extends JFrame {
+public class AppFormAdmin extends JFrame{
     private AppController controller;
     private JPanel rootPanel;
-    private JButton findAlbumButton;
-    private JButton findAllButton;
-    private JTextField textField1;
-    private JCheckBox unownedOnlyCheckBox;
-    private JLabel loggedUserLabel;
-    private JLabel currentDateLabel;
-    private JPanel picture;
-    private JTextField textField2;
-    private JTextField textField3;
-    private JButton findByReleaseButton;
-    private JList list1;
-    private JButton myCollectionButton;
-    private JButton logoutButton;
-    private JTextField textField4;
-    private JButton findSongButton;
 
-    AppFormUser(AppController controller) {
+    AppFormAdmin(AppController controller) {
         this.controller = controller;
         add(rootPanel);
         setTitle("Music Store");
