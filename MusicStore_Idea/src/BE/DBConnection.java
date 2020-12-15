@@ -60,4 +60,9 @@ public class DBConnection {
             con.close();
         } catch(Exception e){ System.out.println(e);}
     }
+
+    public void commit(){
+        String query = "commit";
+        this.getQueryResult(query,new ArrayList<>() );
+    }
 }
