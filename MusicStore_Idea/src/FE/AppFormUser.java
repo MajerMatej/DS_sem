@@ -1,9 +1,14 @@
 package FE;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Date;
+
 import BE.AppController;
+import BE.LoggedUser;
 
 public class AppFormUser extends JFrame {
     private AppController controller;
@@ -29,6 +34,8 @@ public class AppFormUser extends JFrame {
         add(rootPanel);
         setTitle("Music Store");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.loggedUserLabel.setText(controller.getlUser().getNickname());
+        this.currentDateLabel.setText("Logged since " + new Date(System.currentTimeMillis()).toString());
         this.setVisible(true);
 
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -47,5 +54,15 @@ public class AppFormUser extends JFrame {
                 }
             }
         });
+
+        logoutButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                controller.setlUser(new LoggedUser());
+                dispose();
+                new AppFormLogin(controller);
+            }
+        });
     }
+
 }

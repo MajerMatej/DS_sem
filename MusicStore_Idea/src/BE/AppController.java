@@ -14,16 +14,18 @@ public class AppController {
 
     public boolean loginAutentification(String nickname, String pass) {
         ArrayList<String> result = new ArrayList<>();
-        String query = "Select * from user_table where nickname LIKE '" + nickname + "' and user_password LIKE '" + pass + "';";
+        String query = "Select * from user_table where nickname LIKE '" + nickname + "' and user_password LIKE '" + pass + "'";
         conn.getQueryResult(query, result);
         if(result.size() == 0) return false;
         //TODO: parse result to user data
-        lUser.setUser_id(Integer.parseInt(result.get(1)));
-        lUser.setUsername(result.get(2));
-        lUser.setSurname(result.get(3));
-        lUser.setNickname(result.get(5));
-        if(result.get(6) == "a")lUser.setType(userType.ADMIN);
-        if(result.get(6) == "u")lUser.setType(userType.USER);
+        lUser.setUser_id(Integer.parseInt(result.get(0)));
+        lUser.setUsername(result.get(1));
+        lUser.setSurname(result.get(2));
+        lUser.setNickname(result.get(4));
+        if(result.get(5).equals("a"))
+            lUser.setType(userType.ADMIN);
+        if(result.get(5).equals("u"))
+            lUser.setType(userType.USER);
 
         return true;
     }
@@ -32,14 +34,26 @@ public class AppController {
         if(pass1 != pass2) return false;
 
         ArrayList<String> result = new ArrayList<>();
-        String query = "Select max(user_id) from user_table;";
+        String query = "Select max(user_id) from user_table";
         conn.getQueryResult(query, result);
         int id = (result.size() == 0) ? 1 : Integer.parseInt(result.get(1) + 1);
 
         query = "Insert into user_table values(" + id + ", " + name + ", " + surname + ", "
-                + pass1 + ", " + nickname +  ", u);";
+                + pass1 + ", " + nickname +  ", u)";
         conn.getQueryResult(query, result);
         return true;
+    }
+
+    public DBConnection getConn() {
+        return conn;
+    }
+
+    public void setlUser(LoggedUser lUser) {
+        this.lUser = lUser;
+    }
+
+    public LoggedUser getlUser() {
+        return lUser;
     }
 
     public void closeConnection() {

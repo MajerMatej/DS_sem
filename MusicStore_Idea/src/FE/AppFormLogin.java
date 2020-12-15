@@ -1,6 +1,7 @@
 package FE;
 
 import BE.AppController;
+import BE.userType;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -11,10 +12,11 @@ import java.awt.event.WindowEvent;
 public class AppFormLogin extends  JFrame{
     private AppController controller;
     private JPanel rootPanel;
-    private JTextField textField1;
-    private JTextField textField2;
+    private JTextField password;
+    private JTextField nickname;
     private JButton loginButton;
     private JButton registrationButton;
+    private JLabel messageLabel;
 
     AppFormLogin(AppController controller) {
         this.controller = controller;
@@ -44,6 +46,23 @@ public class AppFormLogin extends  JFrame{
             public void actionPerformed(ActionEvent actionEvent) {
                 new AppFormRegistration(controller);
                 dispose();
+            }
+        });
+        loginButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if(controller.loginAutentification(nickname.getText(),password.getText())){
+                    if(controller.getlUser().getType() == userType.USER){
+                        dispose();
+                        new AppFormUser(controller);
+                    }
+                    if(controller.getlUser().getType() == userType.ADMIN){
+                        dispose();
+                        new AppFormAdmin(controller);
+                    }
+                } else {
+                    messageLabel.setText("Incorrect username or password!");
+                }
             }
         });
     }
