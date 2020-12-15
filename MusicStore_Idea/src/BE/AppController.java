@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class AppController {
     private DBConnection conn;
-    private LogedUser lUser= new LogedUser();
+    private LoggedUser lUser= new LoggedUser();
 
     public AppController() {
         conn = new DBConnection();
