@@ -1,13 +1,13 @@
 package BE;
 
-public class LogedUser {
+public class LoggedUser {
     private String username;
     private String surname;
     private String nickname;
     private int user_id;
     private userType type;
 
-    public LogedUser() {
+    public LoggedUser() {
     }
 
     public String getUsername() {
