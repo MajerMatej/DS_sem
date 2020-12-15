@@ -1,64 +1,49 @@
 package BE;
-import java.sql.*;
+
+
 import java.util.ArrayList;
 
 public class AppController {
-    public static void main(String[] args) {
-        createConnection("kojda3", "kajokojda");
-        ArrayList<String> test = new ArrayList<>();
-        int numOfColumns = getQueryResult("select * from store_table", test);
-        testOutput(test, numOfColumns);
-        closeConnection();
+    private DBConnection conn;
+    private LogedUser lUser= new LogedUser();
+
+    public AppController() {
+        conn = new DBConnection();
+        conn.createConnection("kojda3", "kajokojda");
     }
 
-    private static Connection con;
+    public boolean loginAutentification(String nickname, String pass) {
+        ArrayList<String> result = new ArrayList<>();
+        String query = "Select * from user_table where username LIKE '" + nickname
+                + "' and password LIKE '" + pass + "';";
+        conn.getQueryResult(query, result);
+        if(result.size() == 0) return false;
+        //TODO: parse result to user data
+        lUser.setUser_id(Integer.parseInt(result.get(1)));
+        lUser.setUsername(result.get(2));
+        lUser.setSurname(result.get(3));
+        lUser.setNickname(result.get(5));
+        if(result.get(6) == "a")lUser.setType(userType.ADMIN);
+        if(result.get(6) == "u")lUser.setType(userType.USER);
 
-    public static boolean createConnection(String username, String password) {
-        try{
-
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-
-            con=DriverManager.getConnection("jdbc:oracle:thin:@asterix.fri.uniza.sk:1521:orcl", username, password);
-            Statement stmt=con.createStatement();
-
-        }catch(Exception e){ System.out.println(e);}
-
-        return false;
+        return true;
     }
 
-    public static int getQueryResult(String query, ArrayList<String> result) {
-        //ArrayList<String> result = new ArrayList<String>();
-        int columnsNumber = 0;
-        try {
-            Statement stmt=con.createStatement();
+    public boolean registration(String name, String surname, String nickname, String pass1, String pass2) {
+        if(pass1 != pass2) return false;
 
-            ResultSet rs=stmt.executeQuery(query);
-            ResultSetMetaData rsmd = rs.getMetaData();
+        ArrayList<String> result = new ArrayList<>();
+        String query = "Select max(user_id) from user_table;";
+        conn.getQueryResult(query, result);
+        int id = (result.size() == 0) ? 1 : Integer.parseInt(result.get(1) + 1);
 
-            columnsNumber = rsmd.getColumnCount();
-            while(rs.next())
-            {
-                for(int i = 0;i < columnsNumber; i++) {
-                    result.add(rs.getString(i + 1));
-                }
-            }
-        }catch(Exception e){ System.out.println(e);}
-
-        return columnsNumber;
+        query = "Insert into user_table values(" + id + ", " + name + ", " + surname + ", "
+                + pass1 + ", " + nickname +  ", u);";
+        conn.getQueryResult(query, result);
+        return true;
     }
 
-    public static void testOutput(ArrayList<String> results, int numOfColumns) {
-        for(int i = 0; i < results.size(); i++)
-        {
-            System.out.printf(results.get(i));
-            if(i % numOfColumns == numOfColumns - 1) System.out.println('\n');
-        }
-    }
-
-    public static void closeConnection() {
-        try
-        {
-            con.close();
-        } catch(Exception e){ System.out.println(e);}
+    public void closeConnection() {
+        conn.closeConnection();
     }
 }
