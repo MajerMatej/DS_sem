@@ -1,0 +1,106 @@
+--select albumu podla id
+select * from album
+where album_id = 1;
+
+--select songu podla id
+select * from song
+where song_id = 1;
+
+--select albumu podla nazvu
+select * from album
+where upper(title) = upper('myspecialalbum');
+
+--select songu podla nazvu
+select * from song
+where upper(title) = upper('Vanocni');
+
+--select songov podla nazvu albumu
+select sg.title from song sg
+join album alb on(sg.album_id = alb.album_id)
+where upper(alb.title) = upper('MySpecialAlbum');
+
+--select songov ktore si kupil user
+select title from song 
+join order_table using(song_id)
+where user_id = 1;
+
+--select albumov ktore si kupil user
+select distinct alb.title from album alb
+join song using(album_id)
+join order_table using(song_id)
+where user_id = 1;
+
+--select vsetkych pesniciek v albume ktore kupil user
+select distinct sg.title from song sg
+join album alb on(sg.album_id = alb.album_id)
+join order_table using(song_id)
+where alb.album_id = 1 and user_id = 1;
+
+
+--select vsetkych pesniciek podla autora
+select distinct author_name, surname, title from song
+join author using(author_id)
+where author_id = 2
+group by author_name, surname, title;
+
+--prvych x pouzivatelov ktori maju najviac objednavok
+select nickname, count(*) as pocet_objednavok from user_table
+join order_table using(user_id)
+group by nickname
+order by pocet_objednavok desc
+fetch first 3 rows only;
+
+--select prvych x pesniciek podla dlzky
+select title, song_length from song
+group by title, song_length
+order by song_length desc
+fetch first 5 rows only;
+
+--select albumu podla datumu
+select title, genre, release_date from album
+where release_date between '01.01.1990' and '01.01.2000';
+
+--select najpredavanejsich autorov
+select author_name, surname, count(*) as predane from author
+join song using(author_id)
+join order_table using(song_id)
+group by author_name, surname
+order by predane desc;
+
+--select najpredavanejsich zanrov
+select genre , count(*) as predane from album
+join song using(album_id)
+join order_table using(song_id)
+group by genre
+order by predane desc;
+
+--pocet pesniciek v obchode
+select store_name, count(*) as pocet_songov from store_table
+join registry using(store_id)
+where store_id = 1
+group by store_name;
+
+--select pocet albumov v obchode
+select distinct store_name, alb.title, count(*) from store_table
+join registry using(store_id)
+join song sg using(song_id)
+join album alb on(sg.album_id = alb.album_id)
+group by store_name, alb.title;
+
+--select inf o songu a autorovi podla id albumu
+select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title,
+ alb.album_id, alb.picture_id, alb.title, alb.genre, alb.release_date 
+  from song sg
+join album alb on(sg.album_id = alb.album_id)
+where alb.album_id = 1;
+
+--select poctu pesniciek v obchode
+select distinct store_name, count(*) as pocet_pesniciek from store_table
+join registry using(store_id)
+join song using(song_id)
+group by store_name;
+
+--podla album id obrazok
+select picture_data from pictures
+join album using(picture_id)
+where album_id = 2;
