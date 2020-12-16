@@ -82,4 +82,12 @@ public class Album {
         return title;
 
     }
+
+    public String toStringSongs() {
+        String result = "";
+        for(int i = 0; i < songs.size(); i++) {
+            result += songs.get(i).toString() + " " + songs.get(i).getFormatedLength() + "\n";
+        }
+        return result;
+    }
 }
