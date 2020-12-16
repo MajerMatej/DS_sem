@@ -3,6 +3,8 @@ package FE;
 import BE.AppController;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -12,7 +14,11 @@ public class AppFormRegistration extends JFrame {
     private JTextField passwordInput;
     private JTextField confirmPasswordInput;
     private JButton registerButton;
+    private JTextField nicknameInput;
+    private JTextField surnameInput;
+    private JLabel messageLabel;
     private AppController controller;
+
     AppFormRegistration(AppController controller) {
         this.controller = controller;
         add(rootPanel);
@@ -33,6 +39,18 @@ public class AppFormRegistration extends JFrame {
 
                 if (result == JOptionPane.YES_OPTION) {
                     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                }
+            }
+        });
+        registerButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (controller.registration(usernameInput.getText(), surnameInput.getText(), nicknameInput.getText(),
+                        passwordInput.getText(), confirmPasswordInput.getText())){
+                    dispose();
+                    new AppFormLogin(controller);
+                } else {
+                    messageLabel.setText("Nickname already exists or passwords don't match!");
                 }
             }
         });
