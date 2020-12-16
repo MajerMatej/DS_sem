@@ -35,11 +35,24 @@ public class AppFormUser extends JFrame {
     private JLabel songTitle;
     private JLabel author;
     private JLabel pictureLabel;
+    private JList yourSongsList;
+    private JList yourAlbumsList;
+    private JLabel findResultLabel;
+    private JLabel songResultLabel;
+    private JLabel albumResultLabel;
+    private JLabel ySongTitle;
+    private JLabel yGenre;
+    private JLabel yReleaseDate;
+    private JLabel yAuthor;
+    private JPanel customPicturePanel;
+    private JLabel customPictureLabel;
     private JFrame frame;
     private ArrayList<Album> albumList;
     private ArrayList<Song> albumsSongList;
     private ArrayList<Song> songList;
     private Object currentlySelected;
+    private ArrayList<Album> customAlbumList;
+    private ArrayList<Song> customSongList;
 
     AppFormUser(AppController controller) {
         this.controller = controller;
@@ -48,6 +61,9 @@ public class AppFormUser extends JFrame {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.loggedUserLabel.setText(controller.getlUser().getNickname());
         this.currentDateLabel.setText("Logged since " + new Date(System.currentTimeMillis()).toString());
+        clearOutput();
+        clearCustomOutput();
+        findResultLabel.setText("Albums / Songs");
         this.setVisible(true);
 
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -79,6 +95,7 @@ public class AppFormUser extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 clearOutput();
+                findResultLabel.setText("Albums");
                 albumList = new ArrayList<>();
                 albumList = (controller.getAllAlbums());
                 DefaultListModel dlm = new DefaultListModel();
@@ -94,6 +111,7 @@ public class AppFormUser extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 clearOutput();
+                findResultLabel.setText("Songs");
                 songList = new ArrayList<>();
                 songList = (controller.getAllSongs());
                 DefaultListModel dlm = new DefaultListModel();
@@ -114,7 +132,7 @@ public class AppFormUser extends JFrame {
                 if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
                     if (item instanceof Album) {
                         JOptionPane.showMessageDialog(frame,
-                                ((Album) item).getSongs(),
+                                ((Album) item).toStringSongs(),
                                 "Detail",
                                 JOptionPane.INFORMATION_MESSAGE);
                     } else if (item instanceof Song) {
@@ -154,7 +172,7 @@ public class AppFormUser extends JFrame {
                         author.setText(((Song) item).getAuthor().getAuthor_surname() + " "
                                 + ((Song) item).getAuthor().getAuthor_name());
                         Album album = controller.getAlbumByID(((Song) item).getAlbum_id());
-                        if (album != null){
+                        if (album != null) {
                             releaseDate.setText(album.getTitle());
                             BufferedImage image = controller.getImage((album.getPicture_id()));
                             pictureLabel.setIcon(new ImageIcon(image));
@@ -167,13 +185,91 @@ public class AppFormUser extends JFrame {
             }
         });
 
+        myCollectionButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                clearCustomOutput();
+                customAlbumList = new ArrayList<>();
+                customAlbumList = (controller.getAlbumsByUserID(controller.getlUser().getUser_id()));
+                DefaultListModel dlm = new DefaultListModel();
+                if (customAlbumList != null) {
+                    for (int i = 0; i < customAlbumList.size(); i++) {
+                        dlm.addElement(customAlbumList.get(i));
+                    }
+                    yourAlbumsList.setModel(dlm);
+                } else {
+                    dlm.addElement(String.valueOf("You currently don't own any albums."));
+                    yourAlbumsList.setModel(dlm);
+                }
+                customSongList = new ArrayList<>();
+                customSongList = (controller.getSongsByUserID(controller.getlUser().getUser_id()));
+                DefaultListModel dlmS = new DefaultListModel();
 
+                if (customSongList != null) {
+                    for (int i = 0; i < customSongList.size(); i++) {
+                        dlmS.addElement(customSongList.get(i));
+                    }
+                    yourSongsList.setModel(dlmS);
+                } else {
+                    dlmS.addElement(String.valueOf("You currently don't own any albums."));
+                    yourSongsList.setModel(dlmS);
+                }
+            }
+        });
+        yourSongsList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = yourSongsList.locationToIndex(e.getPoint());
+                ListModel dlm = yourSongsList.getModel();
+                Song item = (Song)dlm.getElementAt(index);
+                ySongTitle.setText(((Song) item).getTitle());
+                yGenre.setText("Duration: " + ((Song) item).getFormatedLength());
+                yAuthor.setText(((Song) item).getAuthor().getAuthor_surname() + " "
+                        + ((Song) item).getAuthor().getAuthor_name());
+                Album album = controller.getAlbumByID(((Song) item).getAlbum_id());
+                if (album != null) {
+                    yReleaseDate.setText(album.getTitle());
+                    BufferedImage image = controller.getImage((album.getPicture_id()));
+                    customPictureLabel.setIcon(new ImageIcon(image));
+                } else {
+                    customPictureLabel.setIcon(null);
+                    yReleaseDate.setText("Single");
+                }
+            }
+        });
+        yourAlbumsList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = yourAlbumsList.locationToIndex(e.getPoint());
+                ListModel dlm = yourAlbumsList.getModel();
+                Object item = dlm.getElementAt(index);
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+//                        ((Album) item).setAuthor_name(((Album) item).getSongs().get(0).get);
+                    yGenre.setText(((Album) item).getGenre());
+                    ySongTitle.setText(((Album) item).getTitle());
+//                        author.setText(((Album) item).getAuthor());
+                    yReleaseDate.setText(((Album) item).getRelease_date());
+                    BufferedImage image = controller.getImage(((Album) item).getPicture_id());
+                    customPictureLabel.setIcon(new ImageIcon(image));
+                }
+            }
+        });
     }
-    private void clearOutput(){
+
+
+    private void clearOutput() {
         genre.setText("");
         author.setText("");
         songTitle.setText("");
         releaseDate.setText("");
         pictureLabel.setIcon(null);
+    }
+
+    private void clearCustomOutput() {
+        yGenre.setText("");
+        yAuthor.setText("");
+        ySongTitle.setText("");
+        yReleaseDate.setText("");
+        customPictureLabel.setIcon(null);
     }
 }
