@@ -76,4 +76,10 @@ public class Album {
     public void setAuthor_name(String author_name) {
         this.author_name = author_name;
     }
+
+    @Override
+    public String toString() {
+        return title;
+
+    }
 }

@@ -1,12 +1,12 @@
 package FE;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import java.util.Date;
 
+import BE.Album;
 import BE.AppController;
 import BE.LoggedUser;
 
@@ -14,12 +14,12 @@ public class AppFormUser extends JFrame {
     private AppController controller;
     private JPanel rootPanel;
     private JButton findAlbumButton;
-    private JButton findAllButton;
+    private JButton findAllAlbumsButton;
     private JTextField textField1;
     private JCheckBox unownedOnlyCheckBox;
     private JLabel loggedUserLabel;
     private JLabel currentDateLabel;
-    private JPanel picture;
+    private JPanel picturePanel;
     private JTextField textField2;
     private JTextField textField3;
     private JButton findByReleaseButton;
@@ -28,6 +28,15 @@ public class AppFormUser extends JFrame {
     private JButton logoutButton;
     private JTextField textField4;
     private JButton findSongButton;
+    private JButton findAllSongsButton;
+    private JLabel genre;
+    private JLabel releaseDate;
+    private JLabel songTitle;
+    private JLabel author;
+    private JLabel pictureLabel;
+    private JFrame frame;
+    private ArrayList<Album> albumList;
+    private Object currentlySelected;
 
     AppFormUser(AppController controller) {
         this.controller = controller;
@@ -61,6 +70,57 @@ public class AppFormUser extends JFrame {
                 controller.setlUser(new LoggedUser());
                 dispose();
                 new AppFormLogin(controller);
+            }
+        });
+        findAllAlbumsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                albumList = new ArrayList<>();
+                albumList = (controller.getAllAlbums());
+                DefaultListModel dlm = new DefaultListModel();
+                for (int i = 0; i < albumList.size(); i++) {
+                    dlm.addElement(albumList.get(i));
+                }
+                list1.setModel(dlm);
+
+
+
+            }
+        });
+        list1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = list1.locationToIndex(e.getPoint());
+                ListModel dlm = list1.getModel();
+                Object item = dlm.getElementAt(index);
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                    JOptionPane.showMessageDialog(frame,
+                            item,
+                            "Detail",
+                            JOptionPane.INFORMATION_MESSAGE);
+                }
+            }
+        });
+
+        list1.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int index = list1.locationToIndex(e.getPoint());
+                ListModel dlm = list1.getModel();
+                Object item = dlm.getElementAt(index);
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    if (item instanceof Album) {
+                        currentlySelected = (Album) item;
+                        genre.setText(((Album) item).getGenre());
+                        songTitle.setText(((Album) item).getTitle());
+//                        author.setText(((Album) item).getAuthor());
+                        releaseDate.setText(((Album) item).getRelease_date());
+
+
+                        BufferedImage image = controller.getImage(((Album) item).getPicture_id());
+                        pictureLabel.setIcon(new ImageIcon(image));
+                    }
+                }
             }
         });
     }

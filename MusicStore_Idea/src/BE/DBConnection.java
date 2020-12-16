@@ -50,7 +50,7 @@ public class DBConnection {
             String query = "select picture_data from pictures where picture_id = " + id;
 
             ResultSet rs = stmt.executeQuery(query);
-
+            rs.next();
             java.sql.Blob blob = rs.getBlob(1);
             InputStream in = blob.getBinaryStream();
             BufferedImage image = ImageIO.read(in);
