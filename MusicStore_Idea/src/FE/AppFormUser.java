@@ -9,6 +9,7 @@ import java.util.Date;
 import BE.Album;
 import BE.AppController;
 import BE.LoggedUser;
+import BE.Song;
 
 public class AppFormUser extends JFrame {
     private AppController controller;
@@ -36,6 +37,8 @@ public class AppFormUser extends JFrame {
     private JLabel pictureLabel;
     private JFrame frame;
     private ArrayList<Album> albumList;
+    private ArrayList<Song> albumsSongList;
+    private ArrayList<Song> songList;
     private Object currentlySelected;
 
     AppFormUser(AppController controller) {
@@ -84,6 +87,19 @@ public class AppFormUser extends JFrame {
                 list1.setModel(dlm);
 
 
+            }
+        });
+        findAllSongsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                songList = new ArrayList<>();
+                songList = (controller.getAllSongs());
+                DefaultListModel dlm = new DefaultListModel();
+                for (int i = 0; i < songList.size(); i++) {
+                    dlm.addElement(songList.get(i));
+                }
+                list1.setModel(dlm);
+
 
             }
         });
@@ -94,10 +110,18 @@ public class AppFormUser extends JFrame {
                 ListModel dlm = list1.getModel();
                 Object item = dlm.getElementAt(index);
                 if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                    JOptionPane.showMessageDialog(frame,
-                            item,
-                            "Detail",
-                            JOptionPane.INFORMATION_MESSAGE);
+                    if (item instanceof Album) {
+                        JOptionPane.showMessageDialog(frame,
+                                ((Album) item).getSongs(),
+                                "Detail",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    } else if (item instanceof Song) {
+                        JOptionPane.showMessageDialog(frame,
+                                item,
+                                "Detail",
+                                JOptionPane.INFORMATION_MESSAGE);
+                    }
+
                 }
             }
         });
@@ -110,6 +134,8 @@ public class AppFormUser extends JFrame {
                 Object item = dlm.getElementAt(index);
                 if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
                     if (item instanceof Album) {
+                        ((Album) item).setSongs(controller.getSongsByAlbum(((Album) item).getAlbum_id()));
+//                        ((Album) item).setAuthor_name(((Album) item).getSongs().get(0).get);
                         currentlySelected = (Album) item;
                         genre.setText(((Album) item).getGenre());
                         songTitle.setText(((Album) item).getTitle());
