@@ -1,6 +1,31 @@
 package BE;
 
 public class Song {
+    private int id;
+    private int album_id;
+    private int author_id;
+    private int song_lenght;
+    private String title;
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
+    }
+
+    private Author author;
+
+    public Song(int id, int album_id, int author_id, int song_lenght, String title) {
+        this.id = id;
+        this.album_id = album_id;
+        this.author_id = author_id;
+        this.song_lenght = song_lenght;
+        this.title = title;
+        author = new Author(0,"","","");
+    }
+
     public int getId() {
         return id;
     }
@@ -41,17 +66,7 @@ public class Song {
         this.title = title;
     }
 
-    private int id;
-    private int album_id;
-    private int author_id;
-    private int song_lenght;
-    private String title;
 
-    public Song(int id, int album_id, int author_id, int song_lenght, String title) {
-        this.id = id;
-        this.album_id = album_id;
-        this.author_id = author_id;
-        this.song_lenght = song_lenght;
-        this.title = title;
-    }
+
+
 }

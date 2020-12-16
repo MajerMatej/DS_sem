@@ -2,14 +2,7 @@ package BE;
 
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileInputStream;
-import java.sql.Array;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
-import java.sql.Date;
 
 public class AppController {
     private DBConnection conn;
@@ -82,6 +75,7 @@ public class AppController {
         ArrayList<Album> resultAlb = new ArrayList<>();
         String query = "Select  * from album";
         int numOfColumns = conn.getQueryResult(query, result);
+        if(numOfColumns == 0) return null;
         int id = 0;
         int pic_id = 0;
         String title = "";
@@ -111,6 +105,37 @@ public class AppController {
         return resultAlb;
     }
 
+    public Album getAlbumByID(int album_id) {
+        ArrayList<String> result = new ArrayList<>();
+        String query = "Select  * from album where album_id = " + album_id;
+        int numOfColumns = conn.getQueryResult(query, result);
+        if(numOfColumns == 0) return null;
+
+        int id = 0;
+        int pic_id = 0;
+        String title = "";
+        String genre = "";
+        String release_date = "";
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: id = Integer.parseInt(result.get(i));
+                    break;
+                case 1: pic_id = Integer.parseInt(result.get(i));
+                    break;
+                case 2: title =result.get(i);
+                    break;
+                case 3: genre = result.get(i);
+                    break;
+                case 4: release_date = result.get(i).substring(0,9);
+                    break;
+            }
+        }
+        Album al = new Album(id, pic_id, title, genre, release_date);
+        return al;
+    }
+
+
     public BufferedImage getImage(int id) {
         return conn.getImage(id);
     }
@@ -118,13 +143,22 @@ public class AppController {
     public ArrayList<Song> getSongsByAlbum(int album_id) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Song> resultSong = new ArrayList<>();
-        String query = "Select  * from song where album_id = " + album_id;
+        String query = "select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title, " +
+                "aut.author_id, aut.author_name, aut.surname, aut.nationality " +
+                "from song sg " +
+                "join author aut on(sg.author_id = aut.author_id) " +
+                "where sg.album_id = " + album_id;
         int numOfColumns = conn.getQueryResult(query, result);
+        if(numOfColumns == 0) return null;
         int id = 0;
         int alb_id = 0;
         int author_id = 0;
         int song_length = 0;
         String title = "";
+        int au_id = 0;
+        String author_name = "";
+        String author_surname = "";
+        String nationality = "";
         for(int i = 0; i < result.size(); i++) {
             switch (i % numOfColumns)
             {
@@ -138,27 +172,45 @@ public class AppController {
                     break;
                 case 4: title = result.get(i);
                     break;
+                case 5: au_id =  Integer.parseInt(result.get(i));
+                    break;
+                case 6: author_name = result.get(i);
+                    break;
+                case 7: author_surname = result.get(i);
+                    break;
+                case 8: nationality = result.get(i);
+                    break;
             }
 
             if(i % numOfColumns == numOfColumns - 1) {
-                Song al = new Song(id, alb_id, author_id, song_length, title);
-                resultSong.add(al);
+                Author author = new Author(au_id,author_name, author_surname, nationality);
+                Song song = new Song(id, alb_id, author_id, song_length, title);
+                song.setAuthor(author);
+                resultSong.add(song);
             }
         }
 
         return resultSong;
     }
 
-    public ArrayList<Song> getAllSongs(int album_id) {
+    public ArrayList<Song> getAllSongs() {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Song> resultSong = new ArrayList<>();
-        String query = "Select  * from song";
+        String query = "select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title, " +
+                "aut.author_id, aut.author_name, aut.surname, aut.nationality " +
+                "from song sg " +
+                "join author aut on(sg.author_id = aut.author_id)";
         int numOfColumns = conn.getQueryResult(query, result);
+        if(numOfColumns == 0) return null;
         int id = 0;
         int alb_id = 0;
         int author_id = 0;
         int song_length = 0;
         String title = "";
+        int au_id = 0;
+        String author_name = "";
+        String author_surname = "";
+        String nationality = "";
         for(int i = 0; i < result.size(); i++) {
             switch (i % numOfColumns)
             {
@@ -172,13 +224,24 @@ public class AppController {
                     break;
                 case 4: title = result.get(i);
                     break;
+                case 5: au_id =  Integer.parseInt(result.get(i));
+                    break;
+                case 6: author_name = result.get(i);
+                    break;
+                case 7: author_surname = result.get(i);
+                    break;
+                case 8: nationality = result.get(i);
+                    break;
             }
 
             if(i % numOfColumns == numOfColumns - 1) {
-                Song al = new Song(id, alb_id, author_id, song_length, title);
-                resultSong.add(al);
+                Author author = new Author(au_id,author_name, author_surname, nationality);
+                Song song = new Song(id, alb_id, author_id, song_length, title);
+                song.setAuthor(author);
+                resultSong.add(song);
             }
         }
+
         return resultSong;
     }
 }
