@@ -78,6 +78,7 @@ public class AppFormUser extends JFrame {
         findAllAlbumsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                clearOutput();
                 albumList = new ArrayList<>();
                 albumList = (controller.getAllAlbums());
                 DefaultListModel dlm = new DefaultListModel();
@@ -92,6 +93,7 @@ public class AppFormUser extends JFrame {
         findAllSongsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                clearOutput();
                 songList = new ArrayList<>();
                 songList = (controller.getAllSongs());
                 DefaultListModel dlm = new DefaultListModel();
@@ -145,10 +147,33 @@ public class AppFormUser extends JFrame {
 
                         BufferedImage image = controller.getImage(((Album) item).getPicture_id());
                         pictureLabel.setIcon(new ImageIcon(image));
+                    } else if (item instanceof Song) {
+                        currentlySelected = (Song) item;
+                        songTitle.setText(((Song) item).getTitle());
+                        genre.setText("Duration: " + ((Song) item).getSong_lenght());
+                        author.setText(((Song) item).getAuthor().getAuthor_surname() + " "
+                                + ((Song) item).getAuthor().getAuthor_name());
+                        Album album = controller.getAlbumByID(((Song) item).getAlbum_id());
+                        if (album != null){
+                            releaseDate.setText(album.getTitle());
+                            BufferedImage image = controller.getImage((album.getPicture_id()));
+                            pictureLabel.setIcon(new ImageIcon(image));
+                        } else {
+                            pictureLabel.setIcon(null);
+                            releaseDate.setText("Single");
+                        }
                     }
                 }
             }
         });
-    }
 
+
+    }
+    private void clearOutput(){
+        genre.setText("");
+        author.setText("");
+        songTitle.setText("");
+        releaseDate.setText("");
+        pictureLabel.setIcon(null);
+    }
 }
