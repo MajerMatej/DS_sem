@@ -1,4 +1,9 @@
 package BE;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -6,8 +11,7 @@ public class DBConnection {
     /*public static void main(String[] args) {
         createConnection("kojda3", "kajokojda");
         ArrayList<String> test = new ArrayList<>();
-        int numOfColumns = getQueryResult("select * from store_table", test);
-        testOutput(test, numOfColumns);
+       //addPicture(2, "obrazok.png");
         closeConnection();
     }*/
     private static Connection con;
@@ -23,6 +27,36 @@ public class DBConnection {
         }catch(Exception e){ System.out.println(e);}
 
         return false;
+    }
+
+    public static void addPicture(int id, String name) {
+        try {
+        File file = new File(name);
+
+            FileInputStream fis = new FileInputStream(file);
+            String INSERT_PICTURE = "INSERT INTO pictures(picture_id, picture_data) VALUES (?, ?)";
+
+        PreparedStatement ps = con.prepareStatement(INSERT_PICTURE);{
+            ps.setInt(1, id);
+            ps.setBinaryStream(2, fis, (int) file.length());
+            ps.executeUpdate();
+            con.commit();
+        }} catch(Exception e){ System.out.println(e);}
+    }
+
+    public static BufferedImage getImage(int id) {
+        try {
+            Statement stmt = con.createStatement();
+            String query = "select picture_data from pictures where picture_id = " + id;
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            java.sql.Blob blob = rs.getBlob(1);
+            InputStream in = blob.getBinaryStream();
+            BufferedImage image = ImageIO.read(in);
+            return image;
+        }catch(Exception e){ System.out.println(e);}
+        return null;
     }
 
     public static int getQueryResult(String query, ArrayList<String> result) {

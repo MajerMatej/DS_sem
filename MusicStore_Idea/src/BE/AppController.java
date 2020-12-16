@@ -1,7 +1,15 @@
 package BE;
 
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.sql.Array;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.Date;
 
 public class AppController {
     private DBConnection conn;
@@ -67,5 +75,43 @@ public class AppController {
 
     public void closeConnection() {
         conn.closeConnection();
+    }
+
+    public ArrayList<Album> getAllAlbums() {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Album> resultAlb = new ArrayList<>();
+        String query = "Select  * from album";
+        int numOfColumns = conn.getQueryResult(query, result);
+        int id = 0;
+        int pic_id = 0;
+        String title = "";
+        String genre = "";
+        String release_date = "";
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: id = Integer.parseInt(result.get(i));
+                break;
+                case 1: pic_id = Integer.parseInt(result.get(i));
+                break;
+                case 2: title =result.get(i);
+                break;
+                case 3: genre = result.get(i);
+                break;
+                case 4: release_date = result.get(i);
+                break;
+            }
+
+            if(i % numOfColumns == numOfColumns - 1) {
+                Album al = new Album(id, pic_id, title, genre, release_date);
+                resultAlb.add(al);
+            }
+        }
+
+        return resultAlb;
+    }
+
+    public BufferedImage getImage(int id) {
+        return conn.getImage(id);
     }
 }
