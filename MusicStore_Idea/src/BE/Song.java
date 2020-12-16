@@ -69,6 +69,16 @@ public class Song {
     @Override
     public String toString() {
         return title;
-
     }
+
+    public String getFormatedLength() {
+        int min = 0;
+        int sec = 0;
+        min = song_lenght / 60;
+        sec= song_lenght % 60;
+
+        String result = (min == 0) ? ("sec: " + sec) : ("min: " + min + ", sec: " + sec);
+        return result;
+    }
+
 }
