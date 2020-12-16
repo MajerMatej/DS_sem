@@ -213,4 +213,17 @@ public class AppController {
     public ArrayList<Song> getSongsBySubstring(String substring) {
         return getSongs("select * from song where lower(title) LIKE lower('%" + substring + "%')");
     }
+
+    public ArrayList<Song> getSongsByUserID(int user_id) {
+        return getSongs("select title from song " +
+                "join order_table using(song_id)" +
+                "where user_id = " + user_id);
+    }
+
+    public ArrayList<Album> getAlbumsByUserID(int user_id) {
+        return getAlbums("select distinct alb.title from album alb" +
+                "join song using(album_id)" +
+                "join order_table using(song_id)" +
+                "where user_id = " + user_id);
+    }
 }
