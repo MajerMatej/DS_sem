@@ -79,3 +79,28 @@ select store_name, count(*) as pocet_songov from store_table
 join registry using(store_id)
 where store_id = 1
 group by store_name;
+
+--select pocet albumov v obchode
+select distinct store_name, alb.title, count(*) from store_table
+join registry using(store_id)
+join song sg using(song_id)
+join album alb on(sg.album_id = alb.album_id)
+group by store_name, alb.title;
+
+--select inf o songu a autorovi podla id albumu
+select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title,
+ alb.album_id, alb.picture_id, alb.title, alb.genre, alb.release_date 
+  from song sg
+join album alb on(sg.album_id = alb.album_id)
+where alb.album_id = 1;
+
+--select poctu pesniciek v obchode
+select distinct store_name, count(*) as pocet_pesniciek from store_table
+join registry using(store_id)
+join song using(song_id)
+group by store_name;
+
+--podla album id obrazok
+select picture_data from pictures
+join album using(picture_id)
+where album_id = 2;
