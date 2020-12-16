@@ -150,7 +150,7 @@ public class AppFormUser extends JFrame {
                     } else if (item instanceof Song) {
                         currentlySelected = (Song) item;
                         songTitle.setText(((Song) item).getTitle());
-                        genre.setText("Duration: " + ((Song) item).getSong_lenght());
+                        genre.setText("Duration: " + ((Song) item).getFormatedLength());
                         author.setText(((Song) item).getAuthor().getAuthor_surname() + " "
                                 + ((Song) item).getAuthor().getAuthor_name());
                         Album album = controller.getAlbumByID(((Song) item).getAlbum_id());

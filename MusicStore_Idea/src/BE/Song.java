@@ -4,7 +4,7 @@ public class Song {
     private int id;
     private int album_id;
     private int author_id;
-    private int song_lenght;
+    private int song_length;
     private String title;
 
     public Author getAuthor() {
@@ -17,11 +17,11 @@ public class Song {
 
     private Author author;
 
-    public Song(int id, int album_id, int author_id, int song_lenght, String title) {
+    public Song(int id, int album_id, int author_id, int song_length, String title) {
         this.id = id;
         this.album_id = album_id;
         this.author_id = author_id;
-        this.song_lenght = song_lenght;
+        this.song_length = song_length;
         this.title = title;
         author = new Author(0,"","","");
     }
@@ -50,12 +50,12 @@ public class Song {
         this.author_id = author_id;
     }
 
-    public int getSong_lenght() {
-        return song_lenght;
+    public int getSong_length() {
+        return song_length;
     }
 
-    public void setSong_lenght(int song_lenght) {
-        this.song_lenght = song_lenght;
+    public void setSong_length(int song_length) {
+        this.song_length = song_length;
     }
 
     public String getTitle() {
@@ -74,8 +74,8 @@ public class Song {
     public String getFormatedLength() {
         int min = 0;
         int sec = 0;
-        min = song_lenght / 60;
-        sec= song_lenght % 60;
+        min = song_length / 60;
+        sec= song_length % 60;
 
         String result = (min == 0) ? ("sec: " + sec) : ("min: " + min + ", sec: " + sec);
         return result;
