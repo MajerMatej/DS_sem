@@ -98,7 +98,7 @@ public class AppController {
                 break;
                 case 3: genre = result.get(i);
                 break;
-                case 4: release_date = result.get(i);
+                case 4: release_date = result.get(i).substring(0,9);
                 break;
             }
 
@@ -113,5 +113,72 @@ public class AppController {
 
     public BufferedImage getImage(int id) {
         return conn.getImage(id);
+    }
+
+    public ArrayList<Song> getSongsByAlbum(int album_id) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Song> resultSong = new ArrayList<>();
+        String query = "Select  * from song where album_id = " + album_id;
+        int numOfColumns = conn.getQueryResult(query, result);
+        int id = 0;
+        int alb_id = 0;
+        int author_id = 0;
+        int song_length = 0;
+        String title = "";
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: id = Integer.parseInt(result.get(i));
+                    break;
+                case 1: alb_id = Integer.parseInt(result.get(i));
+                    break;
+                case 2: author_id = Integer.parseInt(result.get(i));
+                    break;
+                case 3: song_length = Integer.parseInt(result.get(i));
+                    break;
+                case 4: title = result.get(i);
+                    break;
+            }
+
+            if(i % numOfColumns == numOfColumns - 1) {
+                Song al = new Song(id, alb_id, author_id, song_length, title);
+                resultSong.add(al);
+            }
+        }
+
+        return resultSong;
+    }
+
+    public ArrayList<Song> getAllSongs(int album_id) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Song> resultSong = new ArrayList<>();
+        String query = "Select  * from song";
+        int numOfColumns = conn.getQueryResult(query, result);
+        int id = 0;
+        int alb_id = 0;
+        int author_id = 0;
+        int song_length = 0;
+        String title = "";
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: id = Integer.parseInt(result.get(i));
+                    break;
+                case 1: alb_id = Integer.parseInt(result.get(i));
+                    break;
+                case 2: author_id = Integer.parseInt(result.get(i));
+                    break;
+                case 3: song_length = Integer.parseInt(result.get(i));
+                    break;
+                case 4: title = result.get(i);
+                    break;
+            }
+
+            if(i % numOfColumns == numOfColumns - 1) {
+                Song al = new Song(id, alb_id, author_id, song_length, title);
+                resultSong.add(al);
+            }
+        }
+        return resultSong;
     }
 }

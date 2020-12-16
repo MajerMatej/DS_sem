@@ -1,5 +1,7 @@
 package BE;
 
+import javax.management.openmbean.ArrayType;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class Album {
@@ -8,6 +10,17 @@ public class Album {
     private String title;
     private String genre;
     private String release_date;
+    private String author_name;
+
+    public ArrayList<Song> getSongs() {
+        return songs;
+    }
+
+    public void setSongs(ArrayList<Song> songs) {
+        this.songs = songs;
+    }
+
+    private ArrayList<Song> songs;
 
     public Album(int album_id, int picture_id, String title, String genre, String release_date) {
         this.album_id = album_id;
@@ -55,5 +68,12 @@ public class Album {
 
     public void setRelease_date(String release_date) {
         this.release_date = release_date;
+    }
+    public String getAuthor_name() {
+        return author_name;
+    }
+
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
     }
 }

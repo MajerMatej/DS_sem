@@ -11,7 +11,7 @@ public class DBConnection {
     /*public static void main(String[] args) {
         createConnection("kojda3", "kajokojda");
         ArrayList<String> test = new ArrayList<>();
-       //addPicture(2, "obrazok.png");
+       addPicture(5, "darth-vader.png");
         closeConnection();
     }*/
     private static Connection con;
