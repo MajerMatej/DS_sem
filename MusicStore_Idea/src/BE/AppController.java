@@ -71,38 +71,7 @@ public class AppController {
     }
 
     public ArrayList<Album> getAllAlbums() {
-        ArrayList<String> result = new ArrayList<>();
-        ArrayList<Album> resultAlb = new ArrayList<>();
-        String query = "Select  * from album";
-        int numOfColumns = conn.getQueryResult(query, result);
-        if(numOfColumns == 0) return null;
-        int id = 0;
-        int pic_id = 0;
-        String title = "";
-        String genre = "";
-        String release_date = "";
-        for(int i = 0; i < result.size(); i++) {
-            switch (i % numOfColumns)
-            {
-                case 0: id = Integer.parseInt(result.get(i));
-                break;
-                case 1: pic_id = Integer.parseInt(result.get(i));
-                break;
-                case 2: title =result.get(i);
-                break;
-                case 3: genre = result.get(i);
-                break;
-                case 4: release_date = result.get(i).substring(0,9);
-                break;
-            }
-
-            if(i % numOfColumns == numOfColumns - 1) {
-                Album al = new Album(id, pic_id, title, genre, release_date);
-                resultAlb.add(al);
-            }
-        }
-
-        return resultAlb;
+        return getAlbums("Select  * from album");
     }
 
     public Album getAlbumByID(int album_id) {
@@ -135,19 +104,63 @@ public class AppController {
         return al;
     }
 
+    private ArrayList<Album> getAlbums(String query) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Album> resultAlb = new ArrayList<>();
+        int numOfColumns = conn.getQueryResult(query, result);
+        if(numOfColumns == 0) return null;
+        int id = 0;
+        int pic_id = 0;
+        String title = "";
+        String genre = "";
+        String release_date = "";
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: id = Integer.parseInt(result.get(i));
+                    break;
+                case 1: pic_id = Integer.parseInt(result.get(i));
+                    break;
+                case 2: title =result.get(i);
+                    break;
+                case 3: genre = result.get(i);
+                    break;
+                case 4: release_date = result.get(i).substring(0,9);
+                    break;
+            }
+
+            if(i % numOfColumns == numOfColumns - 1) {
+                Album al = new Album(id, pic_id, title, genre, release_date);
+                resultAlb.add(al);
+            }
+        }
+
+        return resultAlb;
+    }
 
     public BufferedImage getImage(int id) {
         return conn.getImage(id);
     }
 
     public ArrayList<Song> getSongsByAlbum(int album_id) {
-        ArrayList<String> result = new ArrayList<>();
-        ArrayList<Song> resultSong = new ArrayList<>();
-        String query = "select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title, " +
+
+        return getSongs("select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title, " +
                 "aut.author_id, aut.author_name, aut.surname, aut.nationality " +
                 "from song sg " +
                 "join author aut on(sg.author_id = aut.author_id) " +
-                "where sg.album_id = " + album_id;
+                "where sg.album_id = " + album_id);
+    }
+
+    public ArrayList<Song> getAllSongs() {
+        return getSongs("select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title, " +
+                "aut.author_id, aut.author_name, aut.surname, aut.nationality " +
+                "from song sg " +
+                "join author aut on(sg.author_id = aut.author_id)");
+    }
+
+    private ArrayList<Song> getSongs(String query) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Song> resultSong = new ArrayList<>();
         int numOfColumns = conn.getQueryResult(query, result);
         if(numOfColumns == 0) return null;
         int id = 0;
@@ -193,55 +206,11 @@ public class AppController {
         return resultSong;
     }
 
-    public ArrayList<Song> getAllSongs() {
-        ArrayList<String> result = new ArrayList<>();
-        ArrayList<Song> resultSong = new ArrayList<>();
-        String query = "select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title, " +
-                "aut.author_id, aut.author_name, aut.surname, aut.nationality " +
-                "from song sg " +
-                "join author aut on(sg.author_id = aut.author_id)";
-        int numOfColumns = conn.getQueryResult(query, result);
-        if(numOfColumns == 0) return null;
-        int id = 0;
-        int alb_id = 0;
-        int author_id = 0;
-        int song_length = 0;
-        String title = "";
-        int au_id = 0;
-        String author_name = "";
-        String author_surname = "";
-        String nationality = "";
-        for(int i = 0; i < result.size(); i++) {
-            switch (i % numOfColumns)
-            {
-                case 0: id = Integer.parseInt(result.get(i));
-                    break;
-                case 1: alb_id = Integer.parseInt(result.get(i));
-                    break;
-                case 2: author_id = Integer.parseInt(result.get(i));
-                    break;
-                case 3: song_length = Integer.parseInt(result.get(i));
-                    break;
-                case 4: title = result.get(i);
-                    break;
-                case 5: au_id =  Integer.parseInt(result.get(i));
-                    break;
-                case 6: author_name = result.get(i);
-                    break;
-                case 7: author_surname = result.get(i);
-                    break;
-                case 8: nationality = result.get(i);
-                    break;
-            }
+    public ArrayList<Album> getAlbumsBySubstring(String substring) {
+        return getAlbums("select * from album where lower(title) LIKE lower('%" + substring + "%')");
+    }
 
-            if(i % numOfColumns == numOfColumns - 1) {
-                Author author = new Author(au_id,author_name, author_surname, nationality);
-                Song song = new Song(id, alb_id, author_id, song_length, title);
-                song.setAuthor(author);
-                resultSong.add(song);
-            }
-        }
-
-        return resultSong;
+    public ArrayList<Song> getSongsBySubstring(String substring) {
+        return getSongs("select * from song where lower(title) LIKE lower('%" + substring + "%')");
     }
 }
