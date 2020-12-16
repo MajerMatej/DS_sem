@@ -1,0 +1,123 @@
+Drop table order_table
+/
+Drop table registry
+/
+Drop table song
+/
+Drop table album
+/
+Drop table author
+/
+Drop table pictures
+/
+Drop table store_table
+/
+Drop table user_table
+/
+
+
+Create table user_table
+(
+	user_id Integer NOT NULL ,
+	username Varchar2(30) NOT NULL ,
+	surname Varchar2(30) NOT NULL ,
+    user_password Varchar2(30) NOT NULL ,
+    nickname Varchar2(30) NOT NULL ,
+	user_type Char(1) NOT NULL 
+)
+/
+
+Create table store_table
+(
+	store_id Number NOT NULL ,
+	store_name Varchar2(30) NOT NULL ,
+	city Varchar2(30) NOT NULL ,
+	street Varchar2(30) NOT NULL 
+)
+/
+
+Create table pictures
+(
+    picture_id Number NOT NULL ,
+    picture_data Blob NOT NULL 
+)
+/
+
+drop type author_obj
+/
+Create type author_obj as object
+(
+    author_id Number ,
+    author_name Varchar2(30) ,
+    surname Varchar2(30) ,
+    nationality Varchar2(30)
+);
+/
+
+Create table author of author_obj
+(constraint author_tab_pk primary key(author_id));
+
+Create table album
+(
+	album_id Number NOT NULL ,
+    picture_id Number NOT NULL ,
+	title Varchar2(30) NOT NULL ,
+	genre Varchar2(30) NOT NULL ,
+	release_date Date NOT NULL 
+)
+/
+
+Create table song
+(
+	song_id Number NOT NULL ,
+	album_id Number NOT NULL ,
+	author_id Number NOT NULL ,
+	song_length Number NOT NULL ,
+	title Varchar2(30) NOT NULL 
+)
+/
+
+Create table order_table
+(
+	song_id Number NOT NULL ,
+	user_id Integer NOT NULL ,
+	order_id Number NOT NULL ,
+	order_date Date
+)
+/
+
+Create table registry
+(
+	song_id Number NOT NULL ,
+	store_id Number NOT NULL 
+)
+/
+
+Alter table song add primary key (song_id) 
+/
+Alter table user_table add primary key (user_id) 
+/
+Alter table store_table add primary key (store_id) 
+/
+Alter table registry add primary key (song_id,store_id) 
+/
+Alter table author add primary key (author_id) 
+/
+Alter table album add primary key (album_id) 
+/
+Alter table order_table add primary key (song_id,user_id) 
+/
+
+
+Alter table registry add  foreign key (song_id) references song (song_id) 
+/
+Alter table order_table add  foreign key (song_id) references song (song_id) 
+/
+Alter table order_table add  foreign key (user_id) references user_table (user_id) 
+/
+Alter table registry add  foreign key (store_id) references store_table (store_id) 
+/
+Alter table song add  foreign key (author_id) references author (author_id) 
+/
+Alter table song add  foreign key (album_id) references album (album_id) 
+/
