@@ -2,6 +2,7 @@ package BE;
 
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class AppController {
@@ -96,7 +97,7 @@ public class AppController {
                     break;
                 case 3: genre = result.get(i);
                     break;
-                case 4: release_date = result.get(i).substring(0,9);
+                case 4: release_date = result.get(i).substring(0,10);
                     break;
             }
         }
@@ -125,7 +126,7 @@ public class AppController {
                     break;
                 case 3: genre = result.get(i);
                     break;
-                case 4: release_date = result.get(i).substring(0,9);
+                case 4: release_date = result.get(i).substring(0,10);
                     break;
             }
 
@@ -215,15 +216,52 @@ public class AppController {
     }
 
     public ArrayList<Song> getSongsByUserID(int user_id) {
-        return getSongs("select title from song " +
-                "join order_table using(song_id)" +
+        return getSongs("select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title from song " +
+                "join order_table ot on(sg.song_id = ot.song_id)" +
                 "where user_id = " + user_id);
     }
 
     public ArrayList<Album> getAlbumsByUserID(int user_id) {
-        return getAlbums("select distinct alb.title from album alb" +
-                "join song using(album_id)" +
+        return getAlbums("select distinct alb.album_id, alb.picture_id, alb.title, alb.genre, alb.release_date from album alb" +
+                "join song on(alb.album_id = song.album_id)" +
                 "join order_table using(song_id)" +
                 "where user_id = " + user_id);
+    }
+
+    private ArrayList<Store> getStores(String query) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<Store> resultStore = new ArrayList<>();
+        int numOfColumns = conn.getQueryResult(query, result);
+        if(numOfColumns == 0) return null;
+        int id = 0;
+        String store_name = "";
+        String store_city = "";
+        String store_street = "";
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: id = Integer.parseInt(result.get(i));
+                    break;
+                case 1: store_name = result.get(i);
+                    break;
+                case 2: store_city = result.get(i);
+                    break;
+                case 3: store_street = result.get(i);
+                    break;
+            }
+
+            if(i % numOfColumns == numOfColumns - 1) {
+                Store store = new Store(id, store_name, store_city, store_street);
+                resultStore.add(store);
+            }
+        }
+
+        return resultStore;
+    }
+
+    public ArrayList<Store> getStoresBySongID(int song_id) {
+        return getStores("select st.store_id, st.store_name, st.city, st.street \n" +
+                "from store_table st join registry rg on(st.store_id = rg.store_id) \n" +
+                "join song sg on(rg.song_id = sg.song_id) where rg.song_id = " + song_id);
     }
 }
