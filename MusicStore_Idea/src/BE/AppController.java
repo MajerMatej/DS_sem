@@ -279,8 +279,8 @@ public class AppController {
     }
 
     public ArrayList<Store> getStoresBySongID(int song_id) {
-        return getStores("select st.store_id, st.store_name, st.city, st.street \n" +
-                "from store_table st join registry rg on(st.store_id = rg.store_id) \n" +
+        return getStores("select st.store_id, st.store_name, st.city, st.street " +
+                "from store_table st join registry rg on(st.store_id = rg.store_id) " +
                 "join song sg on(rg.song_id = sg.song_id) where rg.song_id = " + song_id);
     }
 
