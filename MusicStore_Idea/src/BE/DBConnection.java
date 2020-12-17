@@ -8,12 +8,16 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DBConnection {
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         createConnection("kojda3", "kajokojda");
         ArrayList<String> test = new ArrayList<>();
-       addPicture(5, "darth-vader.png");
+       addPicture(6, "giraffe.png");
+        addPicture(7, "face-mask-2291453-1910703.png");
+        addPicture(8, "funny-head-png.png");
+        addPicture(9, "mask.png");
+        addPicture(10, "sheep-b.png");
         closeConnection();
-    }*/
+    }
     private static Connection con;
 
     public static boolean createConnection(String username, String password) {
