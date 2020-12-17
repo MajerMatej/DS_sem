@@ -268,8 +268,13 @@ public class AppController {
                 "join song sg on(rg.song_id = sg.song_id) where rg.song_id = " + song_id);
     }
 
-    public void insertOrder(int song_id, int user_id) {
+    public boolean insertOrder(int song_id, int user_id) {
         ArrayList<String> result = new ArrayList<>();
+
+        int res = conn.getQueryResult("select * from order_table where song_id = "+ song_id + " and user_id = " + user_id, result);
+
+        if(res == 0) return false;
+        result.clear();
         conn.getQueryResult("select max(order_id) from order_table where user_id = " + user_id, result);
         int order_id = Integer.parseInt(result.get(0)) + 1;
 
@@ -278,5 +283,7 @@ public class AppController {
         String query = "Insert into order_table values ("
                 + song_id + ", " + user_id + ", " + order_id + ", sysdate)";
         conn.getQueryResult(query, result);
+
+        return true;
     }
 }
