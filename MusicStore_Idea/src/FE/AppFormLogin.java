@@ -4,6 +4,8 @@ import BE.AppController;
 import BE.userType;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -17,9 +19,12 @@ public class AppFormLogin extends  JFrame{
     private JButton loginButton;
     private JButton registrationButton;
     private JLabel messageLabel;
+    private JPanel loginPanel;
+    private JPanel borderPanel;
 
     AppFormLogin(AppController controller) {
         this.controller = controller;
+        loginPanel.setBackground(new Color(150,150,150));
         add(rootPanel);
         setTitle("Music Store Login");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -66,4 +71,5 @@ public class AppFormLogin extends  JFrame{
             }
         });
     }
+
 }

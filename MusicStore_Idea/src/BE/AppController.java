@@ -105,6 +105,9 @@ public class AppController {
         return al;
     }
 
+
+
+
     private ArrayList<Album> getAlbums(String query) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Album> resultAlb = new ArrayList<>();

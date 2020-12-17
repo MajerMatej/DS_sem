@@ -13,18 +13,22 @@ import java.util.Date;
 public class AppFormAdmin extends JFrame{
     private AppController controller;
     private JPanel rootPanel;
-    private JTextField textField4;
-    private JButton findUserSSongsButton;
-    private JButton findAlbumButton;
-    private JButton findAllSongsButton;
-    private JList list1;
-    private JPanel picture;
     private JLabel loggedUserLabel;
     private JLabel currentDateLabel;
     private JButton logoutButton;
+    private JTextField statCount;
+    private JButton fetchStatisticsButton;
+    private JButton findAllAlbumsButton;
+    private JButton findAllSongsButton;
+    private JList list1;
+    private JLabel findResultLabel;
+    private JPanel picturePanel;
+    private JLabel pictureLabel;
+    private JLabel genre;
+    private JLabel author;
+    private JLabel songTitle;
+    private JLabel releaseDate;
     private JComboBox statistics;
-    private JTextField textField1;
-    private JList list2;
 
     AppFormAdmin(AppController controller) {
         this.controller = controller;

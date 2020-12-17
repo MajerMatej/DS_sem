@@ -16,18 +16,17 @@ public class AppFormUser extends JFrame {
     private JPanel rootPanel;
     private JButton findAlbumButton;
     private JButton findAllAlbumsButton;
-    private JTextField textField1;
-    private JCheckBox unownedOnlyCheckBox;
+    private JTextField nameOfAlbum;
     private JLabel loggedUserLabel;
     private JLabel currentDateLabel;
     private JPanel picturePanel;
-    private JTextField textField2;
-    private JTextField textField3;
+    private JTextField releaseDateFrom;
+    private JTextField releaseDateTo;
     private JButton findByReleaseButton;
     private JList list1;
     private JButton myCollectionButton;
     private JButton logoutButton;
-    private JTextField textField4;
+    private JTextField nameOfSong;
     private JButton findSongButton;
     private JButton findAllSongsButton;
     private JLabel genre;
@@ -46,6 +45,7 @@ public class AppFormUser extends JFrame {
     private JLabel yAuthor;
     private JPanel customPicturePanel;
     private JLabel customPictureLabel;
+    private JButton getSongButton;
     private JFrame frame;
     private ArrayList<Album> albumList;
     private ArrayList<Song> albumsSongList;
@@ -59,8 +59,8 @@ public class AppFormUser extends JFrame {
         add(rootPanel);
         setTitle("Music Store");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.loggedUserLabel.setText(controller.getlUser().getNickname());
-        this.currentDateLabel.setText("Logged since " + new Date(System.currentTimeMillis()).toString());
+        this.loggedUserLabel.setText("Username: " + controller.getlUser().getNickname());
+        this.currentDateLabel.setText("Logged since: " + new Date(System.currentTimeMillis()).toString());
         clearOutput();
         clearCustomOutput();
         findResultLabel.setText("Albums / Songs");
@@ -155,25 +155,24 @@ public class AppFormUser extends JFrame {
                 if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
                     if (item instanceof Album) {
                         ((Album) item).setSongs(controller.getSongsByAlbum(((Album) item).getAlbum_id()));
-//                        ((Album) item).setAuthor_name(((Album) item).getSongs().get(0).get);
                         currentlySelected = (Album) item;
-                        genre.setText(((Album) item).getGenre());
-                        songTitle.setText(((Album) item).getTitle());
-//                        author.setText(((Album) item).getAuthor());
-                        releaseDate.setText(((Album) item).getRelease_date());
-
+                        genre.setText("Genre: " + ((Album) item).getGenre());
+                        songTitle.setText("Title: " + ((Album) item).getTitle());
+                        releaseDate.setText("Release date: " + ((Album) item).getRelease_date());
+                        author.setText("Author: " + (((Album) item).getSongs().get(0).getAuthor().getAuthor_surname() + " "
+                                + ((Album) item).getSongs().get(0).getAuthor().getAuthor_name()));
 
                         BufferedImage image = controller.getImage(((Album) item).getPicture_id());
                         pictureLabel.setIcon(new ImageIcon(image));
                     } else if (item instanceof Song) {
                         currentlySelected = (Song) item;
-                        songTitle.setText(((Song) item).getTitle());
+                        songTitle.setText("Title: " + ((Song) item).getTitle());
                         genre.setText("Duration: " + ((Song) item).getFormatedLength());
-                        author.setText(((Song) item).getAuthor().getAuthor_surname() + " "
+                        author.setText("Author: " + ((Song) item).getAuthor().getAuthor_surname() + " "
                                 + ((Song) item).getAuthor().getAuthor_name());
                         Album album = controller.getAlbumByID(((Song) item).getAlbum_id());
                         if (album != null) {
-                            releaseDate.setText(album.getTitle());
+                            releaseDate.setText("Album: " + album.getTitle());
                             BufferedImage image = controller.getImage((album.getPicture_id()));
                             pictureLabel.setIcon(new ImageIcon(image));
                         } else {
@@ -221,14 +220,14 @@ public class AppFormUser extends JFrame {
             public void mouseClicked(MouseEvent e) {
                 int index = yourSongsList.locationToIndex(e.getPoint());
                 ListModel dlm = yourSongsList.getModel();
-                Song item = (Song)dlm.getElementAt(index);
-                ySongTitle.setText(((Song) item).getTitle());
+                Song item = (Song) dlm.getElementAt(index);
+                ySongTitle.setText("Title: " + ((Song) item).getTitle());
                 yGenre.setText("Duration: " + ((Song) item).getFormatedLength());
-                yAuthor.setText(((Song) item).getAuthor().getAuthor_surname() + " "
+                yAuthor.setText("Author: " + ((Song) item).getAuthor().getAuthor_surname() + " "
                         + ((Song) item).getAuthor().getAuthor_name());
                 Album album = controller.getAlbumByID(((Song) item).getAlbum_id());
                 if (album != null) {
-                    yReleaseDate.setText(album.getTitle());
+                    yReleaseDate.setText("Album: " + album.getTitle());
                     BufferedImage image = controller.getImage((album.getPicture_id()));
                     customPictureLabel.setIcon(new ImageIcon(image));
                 } else {
@@ -245,12 +244,83 @@ public class AppFormUser extends JFrame {
                 Object item = dlm.getElementAt(index);
                 if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
 //                        ((Album) item).setAuthor_name(((Album) item).getSongs().get(0).get);
-                    yGenre.setText(((Album) item).getGenre());
-                    ySongTitle.setText(((Album) item).getTitle());
+                    yGenre.setText("Genre: " + ((Album) item).getGenre());
+                    ySongTitle.setText("Title:" + ((Album) item).getTitle());
 //                        author.setText(((Album) item).getAuthor());
-                    yReleaseDate.setText(((Album) item).getRelease_date());
+                    yReleaseDate.setText("Release date: " + ((Album) item).getRelease_date());
                     BufferedImage image = controller.getImage(((Album) item).getPicture_id());
                     customPictureLabel.setIcon(new ImageIcon(image));
+                }
+            }
+        });
+        getSongButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (currentlySelected instanceof Song) {
+//TODO
+                } else if (currentlySelected instanceof Album) {
+                    JOptionPane.showMessageDialog(
+                            frame,
+                            "You can only get songs, not the whole album",
+                            "Sorry",
+                            JOptionPane.WARNING_MESSAGE);
+                } else if (currentlySelected == null) {
+                    JOptionPane.showMessageDialog(
+                            frame,
+                            "Please select a song to get",
+                            "Error",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+        findAlbumButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                if (!nameOfAlbum.getText().equals("")) {
+                    clearOutput();
+                    albumList = controller.getAlbumsBySubstring(nameOfAlbum.getText());
+                    findResultLabel.setText("Albums");
+                    DefaultListModel dlm = new DefaultListModel();
+                    if (albumList.size() > 0) {
+                        for (int i = 0; i < albumList.size(); i++) {
+                            dlm.addElement(albumList.get(i));
+                        }
+                    } else {
+                        dlm.addElement("No album matches search options");
+                    }
+                    list1.setModel(dlm);
+                } else {
+                    JOptionPane.showMessageDialog(
+                            frame,
+                            "Search field is empty",
+                            "Error",
+                            JOptionPane.WARNING_MESSAGE);
+                }
+            }
+        });
+
+        findSongButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                clearOutput();
+                if (!nameOfSong.getText().equals("")) {
+                    songList = controller.getSongsBySubstring(nameOfSong.getText());
+                    findResultLabel.setText("Songs");
+                    DefaultListModel dlm = new DefaultListModel();
+                    if (songList.size() > 0) {
+                        for (int i = 0; i < songList.size(); i++) {
+                            dlm.addElement(songList.get(i));
+                        }
+                    } else {
+                        dlm.addElement("No song matches search options");
+                    }
+                    list1.setModel(dlm);
+                } else {
+                    JOptionPane.showMessageDialog(
+                            frame,
+                            "Search field is empty",
+                            "Error",
+                            JOptionPane.WARNING_MESSAGE);
                 }
             }
         });

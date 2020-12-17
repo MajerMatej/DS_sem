@@ -46,9 +46,16 @@ public class AppFormRegistration extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (controller.registration(usernameInput.getText(), surnameInput.getText(), nicknameInput.getText(),
-                        passwordInput.getText(), confirmPasswordInput.getText())){
-                    dispose();
-                    new AppFormLogin(controller);
+                        passwordInput.getText(), confirmPasswordInput.getText())) {
+
+                    int result = JOptionPane.showConfirmDialog(
+                            JOptionPane.getRootFrame(),
+                            "Registration successful, please proceed with logging in",
+                            "Success", JOptionPane.DEFAULT_OPTION);
+                    if (result == 0) {
+                        dispose();
+                        new AppFormLogin(controller);
+                    }
                 } else {
                     messageLabel.setText("Nickname already exists or passwords don't match!");
                 }
