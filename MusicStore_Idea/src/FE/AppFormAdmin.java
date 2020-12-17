@@ -1,9 +1,6 @@
 package FE;
 
-import BE.Album;
-import BE.AppController;
-import BE.LoggedUser;
-import BE.Song;
+import BE.*;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -43,9 +40,8 @@ public class AppFormAdmin extends JFrame{
         this.loggedUserLabel.setText(controller.getlUser().getNickname());
         this.currentDateLabel.setText("Logged since " + new Date(System.currentTimeMillis()).toString());
         this.setVisible(true);
-        statistics.addItem(new ComboItem("Visible String 1", "Value 1"));
-        statistics.addItem(new ComboItem("Visible String 2", "Value 2"));
-        statistics.addItem(new ComboItem("Visible String 3", "Value 3"));
+        statistics.addItem(new ComboItem("Most songs users", "Most songs users"));
+        statistics.addItem(new ComboItem("Longest songs", "Longest songs"));
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
@@ -156,6 +152,29 @@ public class AppFormAdmin extends JFrame{
                             releaseDate.setText("Single");
                         }
                     }
+                }
+            }
+        });
+        fetchStatisticsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+            String value = ((ComboItem)statistics.getSelectedItem()).getValue();
+                if(value.equals("Most songs users")){
+                    ArrayList<NickAndCount> users =
+                            controller.getFirstXUserWithMostOrders(Integer.parseInt(statCount.getText()));
+                    DefaultListModel dlm = new DefaultListModel();
+                    for (int i = 0; i < users.size(); i++) {
+                        dlm.addElement(users.get(i));
+                    }
+                    list1.setModel(dlm);
+                } else if(value.equals("Longest songs")){
+                    ArrayList<Song> songs =
+                            controller.getFirstXLongestSongs(Integer.parseInt(statCount.getText()));
+                    DefaultListModel dlm = new DefaultListModel();
+                    for (int i = 0; i < songs.size(); i++) {
+                        dlm.addElement(songs.get(i));
+                    }
+                    list1.setModel(dlm);
                 }
             }
         });

@@ -348,10 +348,16 @@ public class AppFormUser extends JFrame {
         findByReleaseButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
+                clearOutput();
                 String from = releaseDateFrom.getText();
                 String to = releaseDateTo.getText();
-
-
+                albumList = controller.getAlbumsBetweenDates(from,to);
+                DefaultListModel dlm = new DefaultListModel();
+                for (int i = 0; i < albumList.size(); i++) {
+                    dlm.addElement(albumList.get(i));
+                }
+                list1.setModel(dlm);
+                findResultLabel.setText("Albums");
             }
         });
     }
