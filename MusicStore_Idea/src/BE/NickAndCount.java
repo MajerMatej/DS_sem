@@ -27,6 +27,6 @@ public class NickAndCount {
 
     @Override
     public String toString() {
-        return "Nick: " + nick + " Songs count:" + count;
+        return "Nick: " + nick + " Songs count: " + count;
     }
 }

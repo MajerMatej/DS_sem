@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class AppFormAdmin extends JFrame{
+public class AppFormAdmin extends JFrame {
     private AppController controller;
     private JPanel rootPanel;
     private JLabel loggedUserLabel;
@@ -37,16 +37,18 @@ public class AppFormAdmin extends JFrame{
         add(rootPanel);
         setTitle("Music Store");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
-        this.loggedUserLabel.setText(controller.getlUser().getNickname());
-        this.currentDateLabel.setText("Logged since " + new Date(System.currentTimeMillis()).toString());
+        this.loggedUserLabel.setText("Username: " + controller.getlUser().getNickname());
+        this.currentDateLabel.setText("Logged since: " + new Date(System.currentTimeMillis()).toString());
+        clearOutput();
         this.setVisible(true);
-        statistics.addItem(new ComboItem("Most songs users", "Most songs users"));
+        ComboItem cItem = new ComboItem("Most songs users", "Most songs users");
+        statistics.addItem(cItem);
         statistics.addItem(new ComboItem("Longest songs", "Longest songs"));
+        statistics.setSelectedItem(cItem);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent e) {
                 JFrame frame = (JFrame) e.getSource();
-
                 int result = JOptionPane.showConfirmDialog(
                         frame,
                         "Are you sure you want to exit the application?",
@@ -108,11 +110,25 @@ public class AppFormAdmin extends JFrame{
                                 "Detail",
                                 JOptionPane.INFORMATION_MESSAGE);
                     } else if (item instanceof Song) {
-                        JOptionPane.showMessageDialog(frame,
-                                item,
-                                "Detail",
-                                JOptionPane.INFORMATION_MESSAGE);
+                        ArrayList<Store> stores = controller.getStoresBySongID(((Song) item).getId());
+                        String output = "";
+
+                        if (stores != null && stores.size() > 0) {
+                            for (int i = 0; i < stores.size(); i++) {
+                                output += stores.get(i).toString();
+                            }
+                            JOptionPane.showMessageDialog(frame,
+                                    output,
+                                    "Detail",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(frame,
+                                    "This song is currently not in any store",
+                                    "Detail",
+                                    JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
+
 
                 }
             }
@@ -158,8 +174,8 @@ public class AppFormAdmin extends JFrame{
         fetchStatisticsButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-            String value = ((ComboItem)statistics.getSelectedItem()).getValue();
-                if(value.equals("Most songs users")){
+                String value = ((ComboItem) statistics.getSelectedItem()).getValue();
+                if (value.equals("Most songs users")) {
                     ArrayList<NickAndCount> users =
                             controller.getFirstXUserWithMostOrders(Integer.parseInt(statCount.getText()));
                     DefaultListModel dlm = new DefaultListModel();
@@ -167,7 +183,7 @@ public class AppFormAdmin extends JFrame{
                         dlm.addElement(users.get(i));
                     }
                     list1.setModel(dlm);
-                } else if(value.equals("Longest songs")){
+                } else if (value.equals("Longest songs")) {
                     ArrayList<Song> songs =
                             controller.getFirstXLongestSongs(Integer.parseInt(statCount.getText()));
                     DefaultListModel dlm = new DefaultListModel();
@@ -179,6 +195,7 @@ public class AppFormAdmin extends JFrame{
             }
         });
     }
+
     private void clearOutput() {
         genre.setText("");
         author.setText("");
