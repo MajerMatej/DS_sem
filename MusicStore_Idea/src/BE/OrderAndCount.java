@@ -24,4 +24,9 @@ public class OrderAndCount {
     public void setCount(int count) {
         this.count = count;
     }
+
+    @Override
+    public String toString() {
+        return "Day: " + day + " Sold Count: " + count + '\n';
+    }
 }
