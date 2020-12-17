@@ -79,25 +79,29 @@ public class AppController {
         ArrayList<String> result = new ArrayList<>();
         String query = "Select  * from album where album_id = " + album_id;
         int numOfColumns = conn.getQueryResult(query, result);
-        if(numOfColumns == 0) return null;
+        if (numOfColumns == 0) return null;
 
         int id = 0;
         int pic_id = 0;
         String title = "";
         String genre = "";
         String release_date = "";
-        for(int i = 0; i < result.size(); i++) {
-            switch (i % numOfColumns)
-            {
-                case 0: id = Integer.parseInt(result.get(i));
+        for (int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns) {
+                case 0:
+                    id = Integer.parseInt(result.get(i));
                     break;
-                case 1: pic_id = Integer.parseInt(result.get(i));
+                case 1:
+                    pic_id = Integer.parseInt(result.get(i));
                     break;
-                case 2: title =result.get(i);
+                case 2:
+                    title = result.get(i);
                     break;
-                case 3: genre = result.get(i);
+                case 3:
+                    genre = result.get(i);
                     break;
-                case 4: release_date = result.get(i).substring(0,10);
+                case 4:
+                    release_date = result.get(i).substring(0, 10);
                     break;
             }
         }
@@ -106,34 +110,36 @@ public class AppController {
     }
 
 
-
-
     private ArrayList<Album> getAlbums(String query) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Album> resultAlb = new ArrayList<>();
         int numOfColumns = conn.getQueryResult(query, result);
-        if(numOfColumns == 0) return null;
+        if (numOfColumns == 0) return null;
         int id = 0;
         int pic_id = 0;
         String title = "";
         String genre = "";
         String release_date = "";
-        for(int i = 0; i < result.size(); i++) {
-            switch (i % numOfColumns)
-            {
-                case 0: id = Integer.parseInt(result.get(i));
+        for (int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns) {
+                case 0:
+                    id = Integer.parseInt(result.get(i));
                     break;
-                case 1: pic_id = Integer.parseInt(result.get(i));
+                case 1:
+                    pic_id = Integer.parseInt(result.get(i));
                     break;
-                case 2: title =result.get(i);
+                case 2:
+                    title = result.get(i);
                     break;
-                case 3: genre = result.get(i);
+                case 3:
+                    genre = result.get(i);
                     break;
-                case 4: release_date = result.get(i).substring(0,10);
+                case 4:
+                    release_date = result.get(i).substring(0, 10);
                     break;
             }
 
-            if(i % numOfColumns == numOfColumns - 1) {
+            if (i % numOfColumns == numOfColumns - 1) {
                 Album al = new Album(id, pic_id, title, genre, release_date);
                 resultAlb.add(al);
             }
@@ -166,7 +172,7 @@ public class AppController {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Song> resultSong = new ArrayList<>();
         int numOfColumns = conn.getQueryResult(query, result);
-        if(numOfColumns == 0) return null;
+        if (numOfColumns == 0) return null;
         int id = 0;
         int alb_id = 0;
         int author_id = 0;
@@ -176,31 +182,39 @@ public class AppController {
         String author_name = "";
         String author_surname = "";
         String nationality = "";
-        for(int i = 0; i < result.size(); i++) {
-            switch (i % numOfColumns)
-            {
-                case 0: id = Integer.parseInt(result.get(i));
+        for (int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns) {
+                case 0:
+                    id = Integer.parseInt(result.get(i));
                     break;
-                case 1: alb_id = Integer.parseInt(result.get(i));
+                case 1:
+                    alb_id = Integer.parseInt(result.get(i));
                     break;
-                case 2: author_id = Integer.parseInt(result.get(i));
+                case 2:
+                    author_id = Integer.parseInt(result.get(i));
                     break;
-                case 3: song_length = Integer.parseInt(result.get(i));
+                case 3:
+                    song_length = Integer.parseInt(result.get(i));
                     break;
-                case 4: title = result.get(i);
+                case 4:
+                    title = result.get(i);
                     break;
-                case 5: au_id =  Integer.parseInt(result.get(i));
+                case 5:
+                    au_id = Integer.parseInt(result.get(i));
                     break;
-                case 6: author_name = result.get(i);
+                case 6:
+                    author_name = result.get(i);
                     break;
-                case 7: author_surname = result.get(i);
+                case 7:
+                    author_surname = result.get(i);
                     break;
-                case 8: nationality = result.get(i);
+                case 8:
+                    nationality = result.get(i);
                     break;
             }
 
-            if(i % numOfColumns == numOfColumns - 1) {
-                Author author = new Author(au_id,author_name, author_surname, nationality);
+            if (i % numOfColumns == numOfColumns - 1) {
+                Author author = new Author(au_id, author_name, author_surname, nationality);
                 Song song = new Song(id, alb_id, author_id, song_length, title);
                 song.setAuthor(author);
                 resultSong.add(song);
@@ -235,25 +249,28 @@ public class AppController {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Store> resultStore = new ArrayList<>();
         int numOfColumns = conn.getQueryResult(query, result);
-        if(numOfColumns == 0) return null;
+        if (numOfColumns == 0) return null;
         int id = 0;
         String store_name = "";
         String store_city = "";
         String store_street = "";
-        for(int i = 0; i < result.size(); i++) {
-            switch (i % numOfColumns)
-            {
-                case 0: id = Integer.parseInt(result.get(i));
+        for (int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns) {
+                case 0:
+                    id = Integer.parseInt(result.get(i));
                     break;
-                case 1: store_name = result.get(i);
+                case 1:
+                    store_name = result.get(i);
                     break;
-                case 2: store_city = result.get(i);
+                case 2:
+                    store_city = result.get(i);
                     break;
-                case 3: store_street = result.get(i);
+                case 3:
+                    store_street = result.get(i);
                     break;
             }
 
-            if(i % numOfColumns == numOfColumns - 1) {
+            if (i % numOfColumns == numOfColumns - 1) {
                 Store store = new Store(id, store_name, store_city, store_street);
                 resultStore.add(store);
             }
@@ -270,20 +287,19 @@ public class AppController {
 
     public boolean insertOrder(int song_id, int user_id) {
         ArrayList<String> result = new ArrayList<>();
-
-        int res = conn.getQueryResult("select * from order_table where song_id = "+ song_id + " and user_id = " + user_id, result);
-
-        if(res == 0) return false;
+        conn.getQueryResult("select * from order_table where song_id = " + song_id + " and user_id = " + user_id, result);
+        if (result.size() != 0) {
+            return false;
+        }
         result.clear();
-        conn.getQueryResult("select max(order_id) from order_table where user_id = " + user_id, result);
-        int order_id = Integer.parseInt(result.get(0)) + 1;
-
+        int order_id = 1;
+        if (conn.getQueryResult("select max(order_id) from order_table where user_id = " + user_id, result) > 1) {
+            order_id = Integer.parseInt(result.get(0)) + 1;
+        }
         result.clear();
-
         String query = "Insert into order_table values ("
                 + song_id + ", " + user_id + ", " + order_id + ", sysdate)";
         conn.getQueryResult(query, result);
-
         return true;
     }
 }

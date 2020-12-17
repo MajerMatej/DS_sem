@@ -1,8 +1,12 @@
 package FE;
 
 import javax.swing.*;
+import javax.swing.text.DateFormatter;
+import javax.swing.text.DefaultFormatterFactory;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,8 +24,8 @@ public class AppFormUser extends JFrame {
     private JLabel loggedUserLabel;
     private JLabel currentDateLabel;
     private JPanel picturePanel;
-    private JTextField releaseDateFrom;
-    private JTextField releaseDateTo;
+    private JFormattedTextField releaseDateFrom;
+    private JFormattedTextField releaseDateTo;
     private JButton findByReleaseButton;
     private JList list1;
     private JButton myCollectionButton;
@@ -64,6 +68,12 @@ public class AppFormUser extends JFrame {
         clearOutput();
         clearCustomOutput();
         findResultLabel.setText("Albums / Songs");
+        DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
+        // Define the number factory.
+        DateFormatter fft = new DateFormatter(df);
+        DefaultFormatterFactory factory = new DefaultFormatterFactory(fft);
+        releaseDateFrom.setFormatterFactory(factory);
+        releaseDateTo.setFormatterFactory(factory);
         this.setVisible(true);
 
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -103,8 +113,6 @@ public class AppFormUser extends JFrame {
                     dlm.addElement(albumList.get(i));
                 }
                 list1.setModel(dlm);
-
-
             }
         });
         findAllSongsButton.addActionListener(new ActionListener() {
@@ -257,7 +265,20 @@ public class AppFormUser extends JFrame {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
                 if (currentlySelected instanceof Song) {
-//TODO
+                    if(controller.insertOrder(((Song) currentlySelected).getId(),controller.getlUser().getUser_id())){
+                        JOptionPane.showMessageDialog(
+                                frame,
+                                "Song successfully added to your collection",
+                                "Success",
+                                JOptionPane.INFORMATION_MESSAGE);
+                        myCollectionButton.doClick();
+                    } else {
+                        JOptionPane.showMessageDialog(
+                                frame,
+                                "Song is already in your collection",
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE);
+                    }
                 } else if (currentlySelected instanceof Album) {
                     JOptionPane.showMessageDialog(
                             frame,
@@ -322,6 +343,15 @@ public class AppFormUser extends JFrame {
                             "Error",
                             JOptionPane.WARNING_MESSAGE);
                 }
+            }
+        });
+        findByReleaseButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent actionEvent) {
+                String from = releaseDateFrom.getText();
+                String to = releaseDateTo.getText();
+
+
             }
         });
     }
