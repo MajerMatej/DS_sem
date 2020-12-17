@@ -216,15 +216,15 @@ public class AppController {
     }
 
     public ArrayList<Song> getSongsByUserID(int user_id) {
-        return getSongs("select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title from song " +
-                "join order_table ot on(sg.song_id = ot.song_id)" +
+        return getSongs("select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title from song sg " +
+                "join order_table ot on(sg.song_id = ot.song_id) " +
                 "where user_id = " + user_id);
     }
 
     public ArrayList<Album> getAlbumsByUserID(int user_id) {
-        return getAlbums("select distinct alb.album_id, alb.picture_id, alb.title, alb.genre, alb.release_date from album alb" +
-                "join song on(alb.album_id = song.album_id)" +
-                "join order_table using(song_id)" +
+        return getAlbums("select distinct alb.album_id, alb.picture_id, alb.title, alb.genre, alb.release_date from album alb " +
+                "join song on(alb.album_id = song.album_id) " +
+                "join order_table using(song_id) " +
                 "where user_id = " + user_id);
     }
 
