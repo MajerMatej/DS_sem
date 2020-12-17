@@ -79,7 +79,7 @@ public class AppController {
         ArrayList<String> result = new ArrayList<>();
         String query = "Select  * from album where album_id = " + album_id;
         int numOfColumns = conn.getQueryResult(query, result);
-        if (numOfColumns == 0) return null;
+        if(result.size() == 0) return null;
 
         int id = 0;
         int pic_id = 0;
@@ -109,12 +109,11 @@ public class AppController {
         return al;
     }
 
-
     private ArrayList<Album> getAlbums(String query) {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Album> resultAlb = new ArrayList<>();
         int numOfColumns = conn.getQueryResult(query, result);
-        if (numOfColumns == 0) return null;
+        if(result.size() == 0) return null;
         int id = 0;
         int pic_id = 0;
         String title = "";
@@ -172,7 +171,7 @@ public class AppController {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Song> resultSong = new ArrayList<>();
         int numOfColumns = conn.getQueryResult(query, result);
-        if (numOfColumns == 0) return null;
+        if(result.size() == 0) return null;
         int id = 0;
         int alb_id = 0;
         int author_id = 0;
@@ -249,7 +248,7 @@ public class AppController {
         ArrayList<String> result = new ArrayList<>();
         ArrayList<Store> resultStore = new ArrayList<>();
         int numOfColumns = conn.getQueryResult(query, result);
-        if (numOfColumns == 0) return null;
+        if(result.size() == 0) return null;
         int id = 0;
         String store_name = "";
         String store_city = "";
@@ -293,7 +292,8 @@ public class AppController {
         }
         result.clear();
         int order_id = 1;
-        if (conn.getQueryResult("select max(order_id) from order_table where user_id = " + user_id, result) > 1) {
+        if(conn.getQueryResult("select max(order_id) from order_table where user_id = " + user_id, result) > 1) {
+
             order_id = Integer.parseInt(result.get(0)) + 1;
         }
         result.clear();
@@ -301,5 +301,47 @@ public class AppController {
                 + song_id + ", " + user_id + ", " + order_id + ", sysdate)";
         conn.getQueryResult(query, result);
         return true;
+    }
+
+    public ArrayList<Album> getAlbumsBetweenDates(String date1, String date2) {
+        return getAlbums("select * from album " +
+                "where release_date between '" + date1 + "' and '" + date2 + "'");
+    }
+
+    public ArrayList<Song> getFirstXLongestSongs(int count) {
+        return getSongs("select * from song " +
+                "order by song_length desc fetch first "
+                + count + " rows only");
+    }
+
+    public ArrayList<NickAndCount> getFirstXUserWithMostOrders(int count) {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<NickAndCount> resultNC = new ArrayList<>();
+
+        String query = "select nickname, count(*) as pocet_objednavok from user_table "
+                + "join order_table using(user_id) "
+                + "group by nickname order by pocet_objednavok desc "
+                + "fetch first " + count + " rows only";
+
+        int numOfColumns = conn.getQueryResult(query, result);
+        if(result.size() == 0) return null;
+        String nickname = "";
+        int countOfOrders = 0;
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: nickname = result.get(i);
+                    break;
+                case 1: countOfOrders = Integer.parseInt(result.get(i));
+                    break;
+            }
+
+            if(i % numOfColumns == numOfColumns - 1) {
+                NickAndCount nC = new NickAndCount(nickname, countOfOrders);
+                resultNC.add(nC);
+            }
+        }
+
+        return resultNC;
     }
 }
