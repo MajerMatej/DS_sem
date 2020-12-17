@@ -44,4 +44,9 @@ public class Store {
     public void setStreet(String street) {
         this.street = street;
     }
+
+    @Override
+    public String toString() {
+        return "Store name: '" + store_name + " City: " + city + " Street: '" + street +"\n";
+    }
 }

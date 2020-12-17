@@ -33,7 +33,7 @@ public class AppController {
     }
 
     public boolean registration(String name, String surname, String nickname, String pass1, String pass2) {
-        if (!pass1.equals(pass2)) return false;
+        if (!pass1.equals(pass2) || pass1.equals("")) return false;
 
         ArrayList<String> result = new ArrayList<>();
         String query = "Select  nickname from user_table where nickname LIKE '" + nickname + "'";

@@ -69,7 +69,6 @@ public class AppFormUser extends JFrame {
         clearCustomOutput();
         findResultLabel.setText("Albums / Songs");
         DateFormat df = new SimpleDateFormat("dd.MM.yyyy");
-        // Define the number factory.
         DateFormatter fft = new DateFormatter(df);
         DefaultFormatterFactory factory = new DefaultFormatterFactory(fft);
         releaseDateFrom.setFormatterFactory(factory);
