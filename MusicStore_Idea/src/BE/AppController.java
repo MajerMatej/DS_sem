@@ -309,8 +309,11 @@ public class AppController {
     }
 
     public ArrayList<Song> getFirstXLongestSongs(int count) {
-        return getSongs("select * from song " +
-                "order by song_length desc fetch first "
+        return getSongs("select sg.song_id, sg.album_id, sg.author_id, sg.song_length, sg.title, "
+                + "aut.author_id, aut.author_name, aut.surname, aut.nationality "
+                + "from song sg join author aut "
+                + "on(sg.author_id = aut.author_id) "
+                + "order by song_length desc fetch first "
                 + count + " rows only");
     }
 
