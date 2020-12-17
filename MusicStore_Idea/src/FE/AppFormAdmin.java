@@ -44,6 +44,8 @@ public class AppFormAdmin extends JFrame {
         ComboItem cItem = new ComboItem("Most songs users", "Most songs users");
         statistics.addItem(cItem);
         statistics.addItem(new ComboItem("Longest songs", "Longest songs"));
+        statistics.addItem(new ComboItem("Sold count by days", "Sold count by days"));
+
         statistics.setSelectedItem(cItem);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {
@@ -176,16 +178,38 @@ public class AppFormAdmin extends JFrame {
             public void actionPerformed(ActionEvent actionEvent) {
                 String value = ((ComboItem) statistics.getSelectedItem()).getValue();
                 if (value.equals("Most songs users")) {
-                    ArrayList<NickAndCount> users =
-                            controller.getFirstXUserWithMostOrders(Integer.parseInt(statCount.getText()));
-                    DefaultListModel dlm = new DefaultListModel();
-                    for (int i = 0; i < users.size(); i++) {
-                        dlm.addElement(users.get(i));
+                    if (statCount.getText().equals("")) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Number of records not specified",
+                                "Detail",
+                                JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        ArrayList<NickAndCount> users =
+                                controller.getFirstXUserWithMostOrders(Integer.parseInt(statCount.getText()));
+                        DefaultListModel dlm = new DefaultListModel();
+                        for (int i = 0; i < users.size(); i++) {
+                            dlm.addElement(users.get(i));
+                        }
+                        list1.setModel(dlm);
                     }
-                    list1.setModel(dlm);
                 } else if (value.equals("Longest songs")) {
-                    ArrayList<Song> songs =
-                            controller.getFirstXLongestSongs(Integer.parseInt(statCount.getText()));
+                    if (statCount.getText().equals("")) {
+                        JOptionPane.showMessageDialog(frame,
+                                "Number of records not specified",
+                                "Detail",
+                                JOptionPane.WARNING_MESSAGE);
+                    } else {
+                        ArrayList<Song> songs =
+                                controller.getFirstXLongestSongs(Integer.parseInt(statCount.getText()));
+                        DefaultListModel dlm = new DefaultListModel();
+                        for (int i = 0; i < songs.size(); i++) {
+                            dlm.addElement(songs.get(i));
+                        }
+                        list1.setModel(dlm);
+                    }
+                } else if (value.equals("Sold count by days")) {
+                    ArrayList<OrderAndCount> songs =
+                            controller.getOrdersInDay();
                     DefaultListModel dlm = new DefaultListModel();
                     for (int i = 0; i < songs.size(); i++) {
                         dlm.addElement(songs.get(i));

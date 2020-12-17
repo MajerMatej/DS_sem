@@ -47,6 +47,6 @@ public class Store {
 
     @Override
     public String toString() {
-        return "Store name: '" + store_name + " City: " + city + " Street: '" + street +"\n";
+        return "Store name: " + store_name + " City: " + city + " Street: " + street +"\n";
     }
 }
