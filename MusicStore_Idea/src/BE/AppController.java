@@ -347,4 +347,34 @@ public class AppController {
 
         return resultNC;
     }
+
+    public ArrayList<OrderAndCount> getOrdersInDay() {
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<OrderAndCount> resultOC = new ArrayList<>();
+
+        String query = "select to_char(order_date, 'day'), count(*) "
+                + "from order_table group by to_char(order_date, 'day')  "
+                + "order by count(*) desc";
+
+        int numOfColumns = conn.getQueryResult(query, result);
+        if(result.size() == 0) return null;
+        String dayInWeek = "";
+        int countOfOrders = 0;
+        for(int i = 0; i < result.size(); i++) {
+            switch (i % numOfColumns)
+            {
+                case 0: dayInWeek = result.get(i);
+                    break;
+                case 1: countOfOrders = Integer.parseInt(result.get(i));
+                    break;
+            }
+
+            if(i % numOfColumns == numOfColumns - 1) {
+                OrderAndCount nC = new OrderAndCount(dayInWeek, countOfOrders);
+                resultOC.add(nC);
+            }
+        }
+
+        return resultOC;
+    }
 }
