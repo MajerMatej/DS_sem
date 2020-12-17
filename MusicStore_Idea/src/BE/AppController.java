@@ -267,4 +267,16 @@ public class AppController {
                 "from store_table st join registry rg on(st.store_id = rg.store_id) \n" +
                 "join song sg on(rg.song_id = sg.song_id) where rg.song_id = " + song_id);
     }
+
+    public void insertOrder(int song_id, int user_id) {
+        ArrayList<String> result = new ArrayList<>();
+        conn.getQueryResult("select max(order_id) from order_table where user_id = " + user_id, result);
+        int order_id = Integer.parseInt(result.get(0)) + 1;
+
+        result.clear();
+
+        String query = "Insert into order_table values ("
+                + song_id + ", " + user_id + ", " + order_id + ", sysdate)";
+        conn.getQueryResult(query, result);
+    }
 }
