@@ -322,7 +322,7 @@ public class AppController {
         ArrayList<NickAndCount> resultNC = new ArrayList<>();
 
         String query = "select nickname, count(*) as pocet_objednavok from user_table "
-                + "join order_table using(user_id) "
+                + "left join order_table using(user_id) "
                 + "group by nickname order by pocet_objednavok desc "
                 + "fetch first " + count + " rows only";
 

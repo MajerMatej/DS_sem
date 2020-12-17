@@ -24,4 +24,9 @@ public class NickAndCount {
     public void setCount(int count) {
         this.count = count;
     }
+
+    @Override
+    public String toString() {
+        return "Nick: " + nick + " Songs count:" + count;
+    }
 }
